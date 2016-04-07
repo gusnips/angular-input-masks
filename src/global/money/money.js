@@ -13,18 +13,26 @@ function MoneyMaskDirective($locale, $parse, PreFormatters) {
 				currencySym = $locale.NUMBER_FORMATS.CURRENCY_SYM,
 				decimals = $parse(attrs.uiMoneyMask)(scope);
 
-			function maskFactory(decimals) {
-				var decimalsPattern = decimals > 0 ? decimalDelimiter + new Array(decimals + 1).join('0') : '';
-				var maskPattern = currencySym + ' #' + thousandsDelimiter + '##0' + decimalsPattern;
-				return new StringMask(maskPattern, {reverse: true});
+			if (isNaN(decimals)) {
+				decimals = 2;
+			}
+
+			if (angular.isDefined(attrs.uiCurrencySym)) {
+				currencySym = attrs.uiCurrencySym;
+
+				scope.$watch(attrs.uiCurrencySym, function(value) {
+					moneyMask = maskFactory(decimals);
+				});
 			}
 
 			if (angular.isDefined(attrs.uiHideGroupSep)) {
 				thousandsDelimiter = '';
 			}
 
-			if (isNaN(decimals)) {
-				decimals = 2;
+			function maskFactory(decimals) {
+				var decimalsPattern = decimals > 0 ? decimalDelimiter + new Array(decimals + 1).join('0') : '';
+				var maskPattern = currencySym + ' #' + thousandsDelimiter + '##0' + decimalsPattern;
+				return new StringMask(maskPattern, {reverse: true});
 			}
 
 			var moneyMask = maskFactory(decimals);

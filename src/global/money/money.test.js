@@ -156,5 +156,14 @@ describe('ui-money-mask', function() {
 				expect(model.$modelValue).toBe(test.modelValue);
 			});
 		});
+
+		it('should set currency symbol when ui-currency-sym is present', function() {
+			var input = TestUtil.compile('<input ng-model="model" ui-money-mask ui-currency-sym="$$$">', {
+				model: '3456.79'
+			});
+
+			var model = input.controller('ngModel');
+			expect(model.$viewValue).toBe('$$$ 3456.79');
+		});
 	}));
 });
