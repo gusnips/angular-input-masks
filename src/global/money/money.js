@@ -17,16 +17,17 @@ function MoneyMaskDirective($locale, $parse, PreFormatters) {
 				decimals = 2;
 			}
 
+			if (angular.isDefined(attrs.uiHideGroupSep)) {
+				thousandsDelimiter = '';
+			}
+
 			if (angular.isDefined(attrs.uiCurrencySym)) {
 				currencySym = attrs.uiCurrencySym;
 
 				scope.$watch(attrs.uiCurrencySym, function(value) {
+					currencySym = value;
 					moneyMask = maskFactory(decimals);
 				});
-			}
-
-			if (angular.isDefined(attrs.uiHideGroupSep)) {
-				thousandsDelimiter = '';
 			}
 
 			function maskFactory(decimals) {
