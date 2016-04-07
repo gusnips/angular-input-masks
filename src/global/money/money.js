@@ -23,6 +23,11 @@ function MoneyMaskDirective($locale, $parse, PreFormatters) {
 
 			if (angular.isDefined(attrs.uiCurrencySym)) {
 				currencySym = attrs.uiCurrencySym;
+				attrs.$observe('uiCurrencySym', function(value) {
+					currencySym = value;
+					moneyMask = maskFactory(decimals);
+					parser(ctrl.$viewValue);
+				});
 			}
 
 			function maskFactory(decimals) {
@@ -106,14 +111,6 @@ function MoneyMaskDirective($locale, $parse, PreFormatters) {
 				scope.$watch(attrs.max, function(value) {
 					maxVal = value;
 					ctrl.$validate();
-				});
-			}
-
-			if (attrs.uiCurrencySym) {
-				attrs.$observe('uiCurrencySym', function(value) {
-					currencySym = value;
-					moneyMask = maskFactory(decimals);
-					parser(ctrl.$viewValue);
 				});
 			}
 		}
